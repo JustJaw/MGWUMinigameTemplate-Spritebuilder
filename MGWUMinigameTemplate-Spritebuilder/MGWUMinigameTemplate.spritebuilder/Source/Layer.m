@@ -23,7 +23,6 @@
         // Initialize any arrays, dictionaries, etc in here
         item = [[Item alloc] init];
         
-        //elementClass = element;
         _itemArray = [[NSMutableArray alloc] init];
         
     }
@@ -36,7 +35,7 @@
 {
     [super onEnter];
     
-    // accept touches on the layer(upper part of screen
+    // accept touches on the layer(upper part of screen)
     self.userInteractionEnabled = YES;
     
     
@@ -61,15 +60,8 @@
     //New position for the new item
     item.position = ccp(x, y);
     
-    //For loop to check if the item isn't to close to another item
-    //for(Item *sepItem in _itemArray)
-    //{
-        
-    //}
-    
     //Add the item to our item array so we can track them
     [_itemArray addObject: item];
-    
     
     //Makes Item a child of layer so that it appears in the layer
     [self addChild: item];
@@ -78,12 +70,8 @@
     int removeIndex[[_itemArray count] + 1];
     int i = 0;
     
-    int c = (int) [_itemArray count];
-    
     for(Item *itemLoop in _itemArray)
     {
-        [itemLoop animate:(CCTime)delta];
-        
         if([itemLoop isDone])//Gets the index of the item that is done
         {
             removeIndex[i] = ([_itemArray indexOfObject:itemLoop]);
@@ -126,7 +114,6 @@
         //If the distance is less than 43 and the item is a bacteria, or distance is less than 50 and the item is energy
         if (((distance <= 15) && (itemFind.tag == 10))  || (((distance <= 20) && (itemFind.tag == 11))))
         {
-            //A touch location is the perimeter of the item
             found = YES;
             
             if(distance < closeDis)
@@ -139,13 +126,7 @@
     
     if(found)
     {
-        if(closeItem.tag == 10)
-        {
-            NSLog(@"Touched: %@", NSStringFromCGPoint(touchLocation));
-            NSLog(@"Pos: %@", NSStringFromCGPoint(touchLocation));
-            NSLog(@"Distance: %f",closeDis);
-            NSLog(@"A Hit");
-        }
+        //The Last item touched
         LastItem = closeItem;
         
         //Removes the Item
@@ -155,7 +136,6 @@
         [closeItem removeFromParentAndCleanup:YES]; //Removes from the layer
         found = NO;
         closeDis= 0;
-        
     }
 
 }
@@ -173,10 +153,5 @@
 {
     [self addChild: LastItem];
 }
-
-
-
-
-
 
 @end

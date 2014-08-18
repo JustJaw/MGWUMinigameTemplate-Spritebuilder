@@ -9,7 +9,7 @@
 
 @interface MyCharacter : MGWUCharacter
 
-@property BOOL done;
+@property BOOL done; //If the game over animation is done
 
 -(void)jump;
 -(void)setSpeed: (float) speedPerTouch;

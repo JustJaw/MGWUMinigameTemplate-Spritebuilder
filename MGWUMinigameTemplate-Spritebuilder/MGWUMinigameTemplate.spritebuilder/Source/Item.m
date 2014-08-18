@@ -45,9 +45,7 @@
 }
 
 /**
- If the number is 0, only the bacteria animation will be visible. If it is any other number, the energy will apear
- instead
- 
+ If visible is 0, only the bacteria animation will be visible. If it is any other number, the energy with the E letter will appear instead
  */
 -(void)setType:(int)visible
 {
@@ -62,11 +60,6 @@
         [_bacteria setVisible:NO];
         self.tag = 11;
     }
-}
-
--(void)animate:(CCTime)delta
-{
-    [self update:delta];
 }
 
 -(void)update:(CCTime)delta
@@ -102,11 +95,6 @@
 -(BOOL)isDone
 {
     return _done;
-}
-
--(void)touched
-{
-    
 }
 
 @end

@@ -115,7 +115,7 @@
         }
         else if(_layer.touchedTag == 11)
         {
-            _speed += .3f;
+            _speed += .2f;
             
             //Resets the tag to 0 until something else is touched
             _layer.touchedTag = 0;
@@ -127,7 +127,7 @@
         }
         
         //Sets the speed and spawn items every .5 seconds
-        if(_count >= .5f)
+        if(_count >= .25f)
         {
             [self.hero setSpeed: _speed];
             [_layer spawnItems:delta];
@@ -143,6 +143,7 @@
             _footForward = 0;
         }
     }
+    //If the game over animation is done
     else if(self.hero.done == YES)
     {
         [self endMinigame];
@@ -150,7 +151,6 @@
     else
     {
         _count+= delta;
-        
         if (_count >= 5.2f)
         {
             [self endMinigame];
@@ -177,9 +177,6 @@
         if (groundScreenPosition.x <= (-1 * ground.contentSize.width))
         {
             ground.position = ccp(ground.position.x + 2 * ground.contentSize.width, ground.position.y);
-            
-            //fabs(<#double#>) = absoulte value
-           // self.hero.physicsBody.velocity= ccp(fabsf(ground.position.x) / 2, self.hero.position.y);
         }
     }
 
@@ -201,11 +198,9 @@
         [_back1 setPosition: pointOne];
         
         //back 2 becomes back 1 and vice-versa to show which is first and next
-        
         CCNode *temp = _back1;
         _back1 = _back2;
         _back2 = temp;
-        
     }
 
 }
@@ -259,9 +254,6 @@
         }
     
     [self createScoreLabel];
-    
-    //Ends Game
-    //[self endMinigame];
 }
 
 -(void)createScoreLabel

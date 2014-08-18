@@ -17,7 +17,6 @@
 @property int tag;
 
 -(void)setType:(int)visible;
--(void)animate:(CCTime)delta;
 -(BOOL)isDone;
 
 @end
