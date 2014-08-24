@@ -6,10 +6,7 @@
 //
 
 #import "MyMinigame.h"
-
-
-
-
+#define isiPhone5  ([[UIScreen mainScreen] bounds].size.height == 568)?TRUE:FALSE
 
 @class CCBSequence;
 @implementation MyMinigame
@@ -52,7 +49,7 @@
         _score = 0;
         
         //Instructions for the game
-        self.instructions = @"The Hero drank an energy drink and he is ready for his run. Touch as many orange energy molecules to give the hero energy that he deserves. Don't touch the bacteria because that's definitely not the one he needs.";
+        self.instructions = @"The Hero drank an energy drink and he is ready for his run. Touch as many orange energy molecules to give the hero energy that he deserves. Don't touch the sneaky bacteria because that's definitely not the one he needs.";
         
         
         _layer = [[Layer alloc] init];
@@ -67,7 +64,11 @@
     
     _grounds = @[_ground1, _ground2];
     
-    [_endScore setVisible:NO];
+    //Changes the position of the layer if the screen size is the iPhone5
+    if(isiPhone5)
+    {
+        _layer.positionInPoints = ccp(42.6f,_layer.positionInPoints.y);
+    }
     
     // We're calling a public method of the character that tells it to jump!
     //[self.hero jump];
@@ -106,6 +107,7 @@
             [self GameOver];
         }
         
+        //If the bacteria is touched
         if(_layer.touchedTag == 10)
         {
             [self GameOver];
@@ -113,9 +115,20 @@
             //Resets the tag to 0 until something else is touched
             _layer.touchedTag = 0;
         }
+        
+        //If the energy was touched
         else if(_layer.touchedTag == 11)
         {
-            _speed += .2f;
+            //Increases speed faster if the speed is greater than 10.f
+            if(_speed > 10.f)
+            {
+                _speed += 2.f;
+            }
+            else
+            {
+                //The regular speed increase
+                _speed += .2f;
+            }
             
             //Resets the tag to 0 until something else is touched
             _layer.touchedTag = 0;
@@ -184,6 +197,7 @@
 
 -(void)moveBackground
 {
+    //5.4 speed right screen iphone 5
     
     _distance = 3 * _speed;
     CGPoint pointOne=CGPointMake(_back1.position.x  - _distance, _back1.position.y);
@@ -191,13 +205,16 @@
     [_back1 setPosition: pointOne];
     [_back2 setPosition: pointTwo];
     
-    if(self.hero.position.x >= _back2.position.x)
+    NSLog(@"back1:  %@",NSStringFromCGPoint(_back1.position));
+    NSLog(@"back2:  %@",NSStringFromCGPoint(_back2.position));
+
+    if(self.hero.position.x >= _back2.position.x - 300)
     {
         CGFloat newPos = _back2.position.x + _back2.contentSize.width - 1;
         pointOne = CGPointMake(newPos, _back1.position.y);
         [_back1 setPosition: pointOne];
         
-        //back 2 becomes back 1 and vice-versa to show which is first and next
+        //back 2 becomes back 1 and vice-versa to show which is first and next, or which background is the visible background
         CCNode *temp = _back1;
         _back1 = _back2;
         _back2 = temp;
@@ -210,8 +227,8 @@
 
     if(!_gameisOver)
     {
-    int i = _timer.string.intValue;
-     _timer.string = [NSString stringWithFormat:@"%i", i - 1];
+        int i = _timer.string.intValue;
+         _timer.string = [NSString stringWithFormat:@"%i", i - 1];
     }
 }
 
@@ -223,6 +240,7 @@
     //Removes all items from the layer
     [_layer cleanup];
     
+    //If the bacteria is touched
     if(_layer.touchedTag == 10)
     {
         //Plays game over animation
@@ -230,6 +248,21 @@
         
         //Shows the bacteria that was touched
         [_layer showBacteria];
+        
+        // Speed/Score becomes 0 if the speed is less than 2.f
+        if(_speed < 2.f)
+        {
+            _speed = 0;
+        }
+        // Speed/Score decreases by 5.f if the speed is greater than 10.f(A Perfect Score)
+        else if(_speed > 10.f)
+        {
+            _speed -= .5f;
+        }
+        else
+        {
+            _speed -= .10f;
+        }
     }
    
         //Starts a countdown of when to call endminigame
@@ -258,7 +291,6 @@
 
 -(void)createScoreLabel
 {
-    
     _endScore.string = [NSString stringWithFormat:@"Score: %.0f", _score];
     [_endScore setVisible:YES];
 }
